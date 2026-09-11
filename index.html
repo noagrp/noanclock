@@ -2,7 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Noan Clock">
+    <link rel="manifest" href="./manifest.webmanifest?v=1">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png?v=1">
+    <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png?v=1">
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=1">
     <title>Noan Clock</title>
     <style>
         :root {
@@ -104,7 +112,7 @@
             background: var(--pure-white);
             border-radius: 50%;
             box-shadow: 0 0 30px var(--pure-white), 0 0 10px var(--pure-white);
-            display: none; 
+            display: none;
             z-index: 99;
             will-change: transform;
             animation: ball-glow-throb 0.6s infinite alternate ease-in-out;
@@ -185,14 +193,14 @@
         const ball = document.getElementById('game-ball');
         const scoreValEl = document.getElementById('score-val');
         const levelValEl = document.getElementById('level-val');
-        
+
         let lastSecond = -1;
         let targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
         let dayX = targetX, dayY = targetY;
         let dateX = targetX, dateY = targetY;
-        
+
         let ballX = window.innerWidth / 2, ballY = -100;
-        
+
         // Base Game System Variables
         const BASE_SPEED = 4;
         let velX = BASE_SPEED, velY = BASE_SPEED;
@@ -240,7 +248,7 @@
         function triggerReset() {
             ballActive = false;
             ball.style.display = 'none';
-            
+
             // Fetch failed completely: Clear game stats and drop speeds to tier 1 basics
             score = 0;
             level = 1;
@@ -251,12 +259,12 @@
             setTimeout(() => {
                 ballY = -30;
                 ballX = Math.random() * (window.innerWidth - 100) + 50;
-                
+
                 // Recalculate basic speed magnitudes
-                const speedModifier = 1 + (level - 1) * 0.15; 
+                const speedModifier = 1 + (level - 1) * 0.15;
                 velX = (velX > 0 ? 1 : -1) * BASE_SPEED * speedModifier;
-                velY = BASE_SPEED * speedModifier; 
-                
+                velY = BASE_SPEED * speedModifier;
+
                 ball.style.display = 'block';
                 ballActive = true;
             }, COOLDOWN_DELAY);
@@ -272,7 +280,7 @@
                 level += 1;
                 successfulFetches = 0;
                 levelValEl.innerText = level;
-                
+
                 // Scale up speeds linearly by 15% compounded base on target multiplier thresholds
                 const currentDirectionX = velX > 0 ? 1 : -1;
                 const currentDirectionY = velY > 0 ? 1 : -1;
@@ -292,13 +300,13 @@
             if (bCX > rect.left && bCX < rect.right) {
                 if (velY > 0 && (bCY + bR) >= rect.top && bCY < rect.top + (rect.height / 2)) {
                     velY = -Math.abs(velY);
-                    ballY = rect.top - (bR * 2) - 1; 
+                    ballY = rect.top - (bR * 2) - 1;
                     handleSuccessfulBounce();
                     return true;
                 }
                 if (velY < 0 && (bCY - bR) <= rect.bottom && bCY > rect.top + (rect.height / 2)) {
                     velY = Math.abs(velY);
-                    ballY = rect.bottom + 1; 
+                    ballY = rect.bottom + 1;
                     handleSuccessfulBounce();
                     return true;
                 }
@@ -306,9 +314,9 @@
             return false;
         }
 
-        setTimeout(() => { 
-            ballActive = true; 
-            ball.style.display = 'block'; 
+        setTimeout(() => {
+            ballActive = true;
+            ball.style.display = 'block';
         }, INITIAL_DELAY);
 
         function tick() {
@@ -375,6 +383,12 @@
         }
 
         tick();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(console.error);
+            });
+        }
     </script>
 </body>
 </html>
