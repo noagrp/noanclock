@@ -1,11 +1,11 @@
-const CACHE_NAME = 'noan-clock-v1';
+const CACHE_NAME = 'noan-clock-v2';
 const APP_SHELL = [
   './',
   './index.html',
-  './manifest.webmanifest?v=1',
-  './icon-192.png?v=1',
-  './icon-512.png?v=1',
-  './apple-touch-icon.png?v=1'
+  './manifest.webmanifest?v=2',
+  './icon-192.png?v=2',
+  './icon-512.png?v=2',
+  './apple-touch-icon.png?v=2'
 ];
 
 self.addEventListener('install', event => {
